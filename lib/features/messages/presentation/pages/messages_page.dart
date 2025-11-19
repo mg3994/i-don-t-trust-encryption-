@@ -89,7 +89,7 @@ class MessagesPage extends HookWidget {
 
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 44,
+              height: 38,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -144,11 +144,11 @@ class MessagesPage extends HookWidget {
     final theme = Theme.of(context);
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(16),
       child: AnimatedContainer(
         duration: 200.ms,
         curve: Curves.easeOut,
-        padding: EdgeInsets.all(isSelected ? 2 : 1),
+        padding: EdgeInsets.all(isSelected ? 1.5 : 1),
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
@@ -156,29 +156,18 @@ class MessagesPage extends HookWidget {
                 )
               : null,
           borderRadius: BorderRadius.circular(22),
-          border: isSelected
-              ? null
-              : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.12),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : null,
+          border: isSelected ? null : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
         ),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: isSelected ? null : theme.cardColor,
-            borderRadius: BorderRadius.circular(20),
+            color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.12) : theme.cardColor,
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Text(
             label,
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
               color: isSelected
                   ? Colors.white
@@ -187,7 +176,7 @@ class MessagesPage extends HookWidget {
           ),
         ),
       ),
-    ).animate(target: isSelected ? 1 : 0).scale(end: const Offset(1.03, 1.03));
+    ).animate(target: isSelected ? 1 : 0).scale(end: const Offset(1.02, 1.02));
   }
 
   Widget _conversationTile(
