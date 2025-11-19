@@ -72,7 +72,7 @@ class NotificationsPage extends StatelessWidget {
             expandedHeight: 120,
             flexibleSpace: FlexibleSpaceBar(
               background: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 60, 16, 16),
+                padding: const EdgeInsets.fromLTRB(16, 56, 16, 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

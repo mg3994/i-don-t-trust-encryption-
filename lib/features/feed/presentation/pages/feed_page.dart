@@ -9,7 +9,6 @@ class FeedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     // Sample posts with signals
     final posts = [
@@ -90,6 +89,16 @@ class FeedPage extends StatelessWidget {
                 icon: PhosphorIcon(PhosphorIcons.bell()),
                 onPressed: () {},
               ),
+              IconButton(
+                icon: PhosphorIcon(PhosphorIcons.chatCircle()),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const MessagesPage(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
 
@@ -107,7 +116,7 @@ class FeedPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return _buildStoryItem(
                     context,
-                    index == 0 ? 'You' : 'User ${index}',
+                    index == 0 ? 'You' : 'User $index',
                     index == 0,
                   ).animate().fadeIn(delay: (index * 50).ms);
                 },

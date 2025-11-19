@@ -21,7 +21,7 @@ class ProfilePage extends StatelessWidget {
             flexibleSpace: FlexibleSpaceBar(
               background: Column(
                 children: [
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 32),
                   // Profile Picture with Gradient Border
                   Container(
                     decoration: BoxDecoration(
@@ -51,7 +51,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                   ).animate().scale(duration: 400.ms),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
                   Text(
                     'John Doe',
                     style: theme.textTheme.headlineMedium,
@@ -61,13 +61,15 @@ class ProfilePage extends StatelessWidget {
                     '@johndoe',
                     style: theme.textTheme.bodyMedium,
                   ).animate().fadeIn(delay: 300.ms),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 32),
                     child: Text(
                       'Flutter Developer 💙 | Tech Enthusiast | Coffee Lover ☕',
                       style: theme.textTheme.bodyMedium,
                       textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ).animate().fadeIn(delay: 400.ms),
                 ],

@@ -458,7 +458,6 @@ class CreatePostPage extends StatelessWidget {
         Switch(
           value: value,
           onChanged: (val) {},
-          activeColor: AppTheme.primaryColor,
         ),
       ],
     );

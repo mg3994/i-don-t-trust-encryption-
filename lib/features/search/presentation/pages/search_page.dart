@@ -224,7 +224,6 @@ class SearchPage extends StatelessWidget {
   }
 
   Widget _buildTrendingCard(BuildContext context, int index) {
-    final theme = Theme.of(context);
     final gradients = [
       [const Color(0xFF6C5CE7), const Color(0xFFA29BFE)],
       [const Color(0xFFFF6B6B), const Color(0xFFFF8E53)],
