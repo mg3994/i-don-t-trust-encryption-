@@ -13,6 +13,9 @@ class CreatePostPage extends StatelessWidget {
     final postContent = signal('');
     final selectedMood = signal(0);
     final selectedVisibility = signal(0);
+    final allowComments = signal(true);
+    final allowSharing = signal(true);
+    final notifyFollowers = signal(false);
 
     final moods = [
       '😊 Happy',
@@ -277,19 +280,19 @@ class CreatePostPage extends StatelessWidget {
                       _buildToggleOption(
                         PhosphorIcons.chatCircle(),
                         'Allow comments',
-                        true,
+                        allowComments,
                       ),
                       const SizedBox(height: 12),
                       _buildToggleOption(
                         PhosphorIcons.shareNetwork(),
                         'Allow sharing',
-                        true,
+                        allowSharing,
                       ),
                       const SizedBox(height: 12),
                       _buildToggleOption(
                         PhosphorIcons.bell(),
                         'Notify followers',
-                        false,
+                        notifyFollowers,
                       ),
                     ],
                   ),
@@ -449,17 +452,23 @@ class CreatePostPage extends StatelessWidget {
     );
   }
 
-  Widget _buildToggleOption(PhosphorIconData icon, String label, bool value) {
-    return Row(
-      children: [
-        PhosphorIcon(icon, color: Colors.grey, size: 20),
-        const SizedBox(width: 12),
-        Expanded(child: Text(label, style: const TextStyle(fontSize: 14))),
-        Switch(
-          value: value,
-          onChanged: (val) {},
-        ),
-      ],
-    );
+  Widget _buildToggleOption(
+    PhosphorIconData icon,
+    String label,
+    Signal<bool> value,
+  ) {
+    return Watch((context) {
+      return Row(
+        children: [
+          PhosphorIcon(icon, color: Colors.grey, size: 20),
+          const SizedBox(width: 12),
+          Expanded(child: Text(label, style: const TextStyle(fontSize: 14))),
+          Switch(
+            value: value.value,
+            onChanged: (val) => value.value = val,
+          ),
+        ],
+      );
+    });
   }
 }

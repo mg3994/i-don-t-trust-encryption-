@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import '../widgets/post_card.dart';
+import '../../../messages/presentation/pages/messages_page.dart';
 
 class FeedPage extends StatelessWidget {
   const FeedPage({super.key});
