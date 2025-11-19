@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_chip.dart';
 
 class CreatePostPage extends StatelessWidget {
   const CreatePostPage({super.key});
@@ -313,36 +314,12 @@ class CreatePostPage extends StatelessWidget {
     VoidCallback onTap,
     int index,
   ) {
-    return InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            decoration: BoxDecoration(
-              gradient: isSelected
-                  ? const LinearGradient(
-                      colors: [Color(0xFF6C5CE7), Color(0xFFA29BFE)],
-                    )
-                  : null,
-              color: isSelected ? null : Colors.grey.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(16),
-              border: isSelected
-                  ? null
-                  : Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-            ),
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: isSelected ? Colors.white : Colors.grey,
-              ),
-            ),
-          ),
-        )
-        .animate()
-        .fadeIn(delay: (index * 50).ms)
-        .scale(begin: const Offset(0.8, 0.8));
+    return AppChip(
+      label: label,
+      selected: isSelected,
+      onTap: onTap,
+      compact: true,
+    ).animate().fadeIn(delay: (index * 50).ms);
   }
 
   Widget _buildMediaOption(

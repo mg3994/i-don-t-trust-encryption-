@@ -4,6 +4,8 @@ import 'package:signals_hooks/signals_hooks.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_chip.dart';
+import 'chat_detail_page.dart';
 
 class MessagesPage extends HookWidget {
   const MessagesPage({super.key});
@@ -94,11 +96,11 @@ class MessagesPage extends HookWidget {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  _filterChip(context, 'All', filter.value == 0, () => filter.value = 0),
+                  AppChip(label: 'All', selected: filter.value == 0, onTap: () => filter.value = 0, compact: true),
                   const SizedBox(width: 8),
-                  _filterChip(context, 'Unread', filter.value == 1, () => filter.value = 1),
+                  AppChip(label: 'Unread', selected: filter.value == 1, onTap: () => filter.value = 1, compact: true),
                   const SizedBox(width: 8),
-                  _filterChip(context, 'Muted', filter.value == 2, () => filter.value = 2),
+                  AppChip(label: 'Muted', selected: filter.value == 2, onTap: () => filter.value = 2, compact: true),
                 ],
               ),
             ),
@@ -135,49 +137,7 @@ class MessagesPage extends HookWidget {
     );
   }
 
-  Widget _filterChip(
-    BuildContext context,
-    String label,
-    bool isSelected,
-    VoidCallback onTap,
-  ) {
-    final theme = Theme.of(context);
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: AnimatedContainer(
-        duration: 200.ms,
-        curve: Curves.easeOut,
-        padding: EdgeInsets.all(isSelected ? 1.5 : 1),
-        decoration: BoxDecoration(
-          gradient: isSelected
-              ? const LinearGradient(
-                  colors: [Color(0xFF6C5CE7), Color(0xFFA29BFE)],
-                )
-              : null,
-          borderRadius: BorderRadius.circular(22),
-          border: isSelected ? null : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.12) : theme.cardColor,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: isSelected
-                  ? Colors.white
-                  : theme.textTheme.bodyMedium?.color ?? Colors.grey,
-            ),
-          ),
-        ),
-      ),
-    ).animate(target: isSelected ? 1 : 0).scale(end: const Offset(1.02, 1.02));
-  }
+  
 
   Widget _conversationTile(
     BuildContext context,
@@ -186,66 +146,78 @@ class MessagesPage extends HookWidget {
     required VoidCallback onMarkRead,
   }) {
     final theme = Theme.of(context);
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 22,
-              backgroundColor: AppTheme.primaryColor,
-              child: Text(
-                c.name[0],
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ChatDetailPage(name: c.name),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: theme.cardColor,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 22,
+                  backgroundColor: AppTheme.primaryColor,
+                  child: Text(
+                    c.name[0],
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(c.name, style: theme.textTheme.titleLarge),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(c.name, style: theme.textTheme.titleLarge),
+                          ),
+                          if (c.unread > 0)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFF6B6B).withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                '${c.unread}',
+                                style: const TextStyle(color: Color(0xFFFF6B6B), fontWeight: FontWeight.bold, fontSize: 12),
+                              ),
+                            ),
+                        ],
                       ),
-                      if (c.unread > 0)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFF6B6B).withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            '${c.unread}',
-                            style: const TextStyle(color: Color(0xFFFF6B6B), fontWeight: FontWeight.bold, fontSize: 12),
-                          ),
-                        ),
+                      const SizedBox(height: 4),
+                      Text(c.lastMessage, style: theme.textTheme.bodySmall, overflow: TextOverflow.ellipsis),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(c.lastMessage, style: theme.textTheme.bodySmall, overflow: TextOverflow.ellipsis),
-                ],
-              ),
+                ),
+                const SizedBox(width: 12),
+                IconButton(
+                  icon: PhosphorIcon(
+                    c.muted ? PhosphorIcons.bellSlash(PhosphorIconsStyle.fill) : PhosphorIcons.bell(),
+                  ),
+                  onPressed: onMuteToggle,
+                ),
+                IconButton(
+                  icon: PhosphorIcon(PhosphorIcons.check()),
+                  onPressed: onMarkRead,
+                ),
+              ],
             ),
-            const SizedBox(width: 12),
-            IconButton(
-              icon: PhosphorIcon(
-                c.muted ? PhosphorIcons.bellSlash(PhosphorIconsStyle.fill) : PhosphorIcons.bell(),
-              ),
-              onPressed: onMuteToggle,
-            ),
-            IconButton(
-              icon: PhosphorIcon(PhosphorIcons.check()),
-              onPressed: onMarkRead,
-            ),
-          ],
+          ),
         ),
       ),
     ).animate().fadeIn(duration: 300.ms).slideX(begin: 0.1, end: 0);

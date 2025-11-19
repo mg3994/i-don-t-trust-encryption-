@@ -3,6 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
+import '../../../bookmarks/presentation/pages/bookmarks_page.dart';
+import 'edit_profile_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -87,6 +89,16 @@ class ProfilePage extends StatelessWidget {
                   );
                 },
               ),
+              IconButton(
+                icon: PhosphorIcon(PhosphorIcons.bookmarkSimple()),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const BookmarksPage(),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
 
@@ -116,6 +128,13 @@ class ProfilePage extends StatelessWidget {
                       'Edit Profile',
                       PhosphorIcons.pencilSimple(),
                       isPrimary: true,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const EditProfilePage(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -123,6 +142,7 @@ class ProfilePage extends StatelessWidget {
                     child: _buildActionButton(
                       'Share Profile',
                       PhosphorIcons.shareNetwork(),
+                      onPressed: () {},
                     ),
                   ),
                 ],
@@ -199,6 +219,7 @@ class ProfilePage extends StatelessWidget {
     String label,
     PhosphorIconData icon, {
     bool isPrimary = false,
+    VoidCallback? onPressed,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -213,7 +234,7 @@ class ProfilePage extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: onPressed ?? () {},
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),

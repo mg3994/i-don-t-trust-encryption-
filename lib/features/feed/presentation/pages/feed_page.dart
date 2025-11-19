@@ -4,6 +4,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import '../widgets/post_card.dart';
 import '../../../messages/presentation/pages/messages_page.dart';
+import '../../../reels/presentation/pages/reels_page.dart';
 
 class FeedPage extends StatelessWidget {
   const FeedPage({super.key});
@@ -89,6 +90,16 @@ class FeedPage extends StatelessWidget {
               IconButton(
                 icon: PhosphorIcon(PhosphorIcons.bell()),
                 onPressed: () {},
+              ),
+              IconButton(
+                icon: PhosphorIcon(PhosphorIcons.playCircle()),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const ReelsPage(),
+                    ),
+                  );
+                },
               ),
               IconButton(
                 icon: PhosphorIcon(PhosphorIcons.chatCircle()),

@@ -3,6 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_chip.dart';
+import '../../../communities/presentation/pages/communities_page.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -23,6 +25,18 @@ class SearchPage extends StatelessWidget {
             floating: true,
             snap: true,
             expandedHeight: 140,
+            actions: [
+              IconButton(
+                icon: PhosphorIcon(PhosphorIcons.users()),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const CommunitiesPage(),
+                    ),
+                  );
+                },
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               background: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 60, 16, 16),
@@ -87,11 +101,11 @@ class SearchPage extends StatelessWidget {
                     final isSelected = selectedCategory.value == index;
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
-                      child: _buildCategoryPill(
-                        context,
-                        categories[index],
-                        isSelected,
-                        () => selectedCategory.value = index,
+                      child: AppChip(
+                        label: categories[index],
+                        selected: isSelected,
+                        onTap: () => selectedCategory.value = index,
+                        compact: true,
                       ),
                     ).animate().fadeIn(delay: (index * 50).ms);
                   },
@@ -197,49 +211,7 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryPill(
-    BuildContext context,
-    String label,
-    bool isSelected,
-    VoidCallback onTap,
-  ) {
-    final theme = Theme.of(context);
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: AnimatedContainer(
-        duration: 200.ms,
-        curve: Curves.easeOut,
-        padding: EdgeInsets.all(isSelected ? 1.5 : 1),
-        decoration: BoxDecoration(
-          gradient: isSelected
-              ? const LinearGradient(
-                  colors: [Color(0xFF6C5CE7), Color(0xFFA29BFE)],
-                )
-              : null,
-          borderRadius: BorderRadius.circular(22),
-          border: isSelected ? null : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.12) : theme.cardColor,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: isSelected
-                  ? Colors.white
-                  : theme.textTheme.bodyMedium?.color ?? Colors.grey,
-            ),
-          ),
-        ),
-      ),
-    ).animate(target: isSelected ? 1 : 0).scale(end: const Offset(1.02, 1.02));
-  }
+  
 
   Widget _buildTrendingCard(BuildContext context, int index) {
     final gradients = [

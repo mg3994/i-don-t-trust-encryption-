@@ -3,6 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 import '../../../../core/theme/app_theme.dart';
+import 'notification_settings_page.dart';
+import '../../../../core/widgets/app_chip.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -62,7 +64,7 @@ class NotificationsPage extends StatelessWidget {
       ),
     ];
 
-    return Scaffold(
+  return Scaffold(
       body: CustomScrollView(
         slivers: [
           // Header
@@ -110,7 +112,13 @@ class NotificationsPage extends StatelessWidget {
                         ),
                         IconButton(
                           icon: PhosphorIcon(PhosphorIcons.dotsThree()),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const NotificationSettingsPage(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ).animate().fadeIn(duration: 400.ms),
@@ -133,11 +141,11 @@ class NotificationsPage extends StatelessWidget {
                     final isSelected = selectedFilter.value == index;
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
-                      child: _buildFilterPill(
-                        context,
-                        filters[index],
-                        isSelected,
-                        () => selectedFilter.value = index,
+                      child: AppChip(
+                        label: filters[index],
+                        selected: isSelected,
+                        onTap: () => selectedFilter.value = index,
+                        compact: true,
                       ),
                     ).animate().fadeIn(delay: (index * 50).ms);
                   },
@@ -165,49 +173,7 @@ class NotificationsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterPill(
-    BuildContext context,
-    String label,
-    bool isSelected,
-    VoidCallback onTap,
-  ) {
-    final theme = Theme.of(context);
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: AnimatedContainer(
-        duration: 200.ms,
-        curve: Curves.easeOut,
-        padding: EdgeInsets.all(isSelected ? 1.5 : 1),
-        decoration: BoxDecoration(
-          gradient: isSelected
-              ? const LinearGradient(
-                  colors: [Color(0xFF6C5CE7), Color(0xFFA29BFE)],
-                )
-              : null,
-          borderRadius: BorderRadius.circular(22),
-          border: isSelected ? null : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.12) : theme.cardColor,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: isSelected
-                  ? Colors.white
-                  : theme.textTheme.bodyMedium?.color ?? Colors.grey,
-            ),
-          ),
-        ),
-      ),
-    ).animate(target: isSelected ? 1 : 0).scale(end: const Offset(1.02, 1.02));
-  }
+  
 
   Widget _buildNotificationItem(
     BuildContext context,
