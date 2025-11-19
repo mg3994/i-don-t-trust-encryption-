@@ -89,16 +89,16 @@ class MessagesPage extends HookWidget {
 
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 48,
+              height: 44,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 children: [
-                  _filterChip('All', filter.value == 0, () => filter.value = 0),
+                  _filterChip(context, 'All', filter.value == 0, () => filter.value = 0),
                   const SizedBox(width: 8),
-                  _filterChip('Unread', filter.value == 1, () => filter.value = 1),
+                  _filterChip(context, 'Unread', filter.value == 1, () => filter.value = 1),
                   const SizedBox(width: 8),
-                  _filterChip('Muted', filter.value == 2, () => filter.value = 2),
+                  _filterChip(context, 'Muted', filter.value == 2, () => filter.value = 2),
                 ],
               ),
             ),
@@ -135,31 +135,59 @@ class MessagesPage extends HookWidget {
     );
   }
 
-  Widget _filterChip(String label, bool isSelected, VoidCallback onTap) {
+  Widget _filterChip(
+    BuildContext context,
+    String label,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
+    final theme = Theme.of(context);
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      borderRadius: BorderRadius.circular(18),
+      child: AnimatedContainer(
+        duration: 200.ms,
+        curve: Curves.easeOut,
+        padding: EdgeInsets.all(isSelected ? 2 : 1),
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
                   colors: [Color(0xFF6C5CE7), Color(0xFFA29BFE)],
                 )
               : null,
-          color: isSelected ? null : Colors.grey.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(22),
+          border: isSelected
+              ? null
+              : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.12),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: isSelected ? Colors.white : Colors.grey,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            color: isSelected ? null : theme.cardColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: isSelected
+                  ? Colors.white
+                  : theme.textTheme.bodyMedium?.color ?? Colors.grey,
+            ),
           ),
         ),
       ),
-    );
+    ).animate(target: isSelected ? 1 : 0).scale(end: const Offset(1.03, 1.03));
   }
 
   Widget _conversationTile(

@@ -123,7 +123,7 @@ class NotificationsPage extends StatelessWidget {
           // Filter Pills
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 50,
+              height: 44,
               child: Watch((context) {
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -134,6 +134,7 @@ class NotificationsPage extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: _buildFilterPill(
+                        context,
                         filters[index],
                         isSelected,
                         () => selectedFilter.value = index,
@@ -164,31 +165,59 @@ class NotificationsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterPill(String label, bool isSelected, VoidCallback onTap) {
+  Widget _buildFilterPill(
+    BuildContext context,
+    String label,
+    bool isSelected,
+    VoidCallback onTap,
+  ) {
+    final theme = Theme.of(context);
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      borderRadius: BorderRadius.circular(18),
+      child: AnimatedContainer(
+        duration: 200.ms,
+        curve: Curves.easeOut,
+        padding: EdgeInsets.all(isSelected ? 2 : 1),
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
                   colors: [Color(0xFF6C5CE7), Color(0xFFA29BFE)],
                 )
               : null,
-          color: isSelected ? null : Colors.grey.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(22),
+          border: isSelected
+              ? null
+              : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.12),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: isSelected ? Colors.white : Colors.grey,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? null : theme.cardColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: isSelected
+                  ? Colors.white
+                  : theme.textTheme.bodyMedium?.color ?? Colors.grey,
+            ),
           ),
         ),
       ),
-    );
+    ).animate(target: isSelected ? 1 : 0).scale(end: const Offset(1.03, 1.03));
   }
 
   Widget _buildNotificationItem(
